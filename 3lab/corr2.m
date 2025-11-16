@@ -85,6 +85,12 @@ title("b[] со сдвигом на 2");
 xlabel("Индекс");
 ylabel("Значение");
 
+%% Доп задание
+
+array = b;
+
+
+
 function result = corr(a, b)
     result = 0;
     n = length(a);
