@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <iomanip>
+#include <cmath>
 
 using namespace std;
 
@@ -68,13 +69,73 @@ void autocorr(const T *eq_array, size_t len){
     free(array);
 }
 
+template<typename T>
+int verify(const T *array, int16_t len){
+    int16_t count_of_one = 0;
+    int16_t count_of_null = 0;
+
+    int16_t cicle = 0;
+    int16_t count_1 = 0;
+    int16_t count_2 = 0;
+    int16_t count_3 = 0;
+    int16_t count_4 = 0;
+    int16_t count_5 = 0;
+
+
+
+    for (size_t i = 0; i < len; i ++){
+        cicle = 0;
+
+        for (size_t j = i; (j < len) && (array[j] == 1); j ++){
+            cicle += 1;
+        }
+        for (size_t j = i; (j < len) && (array[j] == 0); j ++){
+            cicle += 1;
+        }
+        if (cicle == 1){
+            count_1 += 1;
+        } else if (cicle == 2) {
+            count_2 += 1;
+        } else if (cicle == 3) {
+            count_3 += 1;
+        } else if (cicle == 4) {
+            count_4 += 1;
+        } else{
+            count_5 += 1;
+        }
+
+    }
+    cout << "count_1: " << count_1 << endl;
+    cout << "count_2: " << count_2 << endl;
+    cout << "count_3: " << count_3 << endl;
+    cout << "count_4: " << count_4 << endl;
+
+
+    for (size_t i = 0; i < len; i++){
+        if (array[i] == 1){
+            count_of_one++;
+        } else {
+            count_of_null++;
+        }
+    }
+
+    cout << "count_of_one: " << count_of_one << endl;
+    cout << "count_of_null: " << count_of_null << endl;
+
+    if (abs(count_of_one - count_of_null) > 1){
+        return 1;
+    }
+    
+    return 0;
+}
+
 // Вариант 20 - x = 10100 y = x + 7 = 11011
 
 int main(){
     // Две последовательности битов  (линейно свдиговые регистры)
     size_t m = 5;
-    int16_t Rex_x[] = {1, 0, 1, 0 , 0};
-    int16_t Rex_y[] = {1, 1, 0, 1 , 1};
+    int16_t Rex_x[] = {1, 0, 0, 0, 0};
+    int16_t Rex_y[] = {0, 0, 1, 0, 0};
 
     size_t N = 31;
     int16_t *out = (int16_t*)malloc(N * sizeof(int16_t));
@@ -97,6 +158,11 @@ int main(){
     show_arr("Rex_y[]", Rex_y, m);
 
     show_arr("out[]", out, N);
+    if (verify(out, N) == 0){
+        cout << "posledovatelnost: psevdoslu4aina" << endl;
+    } else {
+        cout << "posledovatelnost: nepsevdoslu4aina" << endl;
+    }
 
     autocorr(out, N);
 

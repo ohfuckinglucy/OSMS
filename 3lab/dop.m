@@ -5,6 +5,9 @@ a = randi(100,16,1) - 1;
 b = randi(100,16,1) - 1;
 c = randi(100,16,1) - 1;
 
+aa = [0, 78, 13, 4, 5, 67,1, 90, 54, 99, 12, 0, 1, 8, 76, 12];
+arr = transpose(aa);
+
 res_ab = normcorr(a, b);
 res_ac = normcorr(a, c);
 res_bc = normcorr(b, c);
@@ -27,25 +30,27 @@ title("c[]");
 res_a_shift = zeros(1, 16);
 res_b_shift = zeros(1, 16);
 res_c_shift = zeros(1, 16);
+res_arr_shift = zeros(1, 16);
 
 for i = 1:16
     shifted_a = circshift(a, i-1);
     shifted_b = circshift(b, i-1);
     shifted_c = circshift(c, i-1);
+    shifted_arr = circshift(arr, i-1);
     res_a_shift(i) = normcorr(a, shifted_a);
     res_b_shift(i) = normcorr(b, shifted_b);
     res_c_shift(i) = normcorr(c, shifted_c);
+    res_arr_shift(i) = normcorr(arr, shifted_arr);
 end
 
+
 figure();
-subplot(3, 1, 1);
-plot(1:16, res_a_shift);
-title("Автокорреляция a[]");
-subplot(3, 1, 2);
-plot(1:16, res_b_shift);
-title("Автокорреляция b[]");
-subplot(3, 1, 3);
-plot(1:16, res_c_shift);
+hold on;
+plot(1:16, res_a_shift, 'g');
+plot(1:16, res_b_shift, 'r');
+plot(1:16, res_c_shift, 'b');
+plot(1:16, res_arr_shift, 'b--');
+hold on;
 title("Автокорреляция c[]");
 
 function result = normcorr(a, b)
